@@ -1,0 +1,20 @@
+FROM node:lts-alpine
+
+# Make the `app` foldedr the current working directory
+# RUN mkdir -p /app
+# WORKDIR /app
+
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+
+# Install project dependencies
+# RUN npm install \
+#   && npm install -g cross-env
+RUN npm install pm2 -g
+RUN npm run build
+
+EXPOSE 8080
+CMD ["pm2-runtime", "server.js", "--env", "production"]
+# CMD ["npm", "run", "serve"]

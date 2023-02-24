@@ -1,0 +1,24 @@
+FROM node:16-alpine
+
+# Install os dependencies
+# RUN \
+#   apt-get update \
+#   && apt-get -y install curl \
+  # && apt-get -y install vim
+
+# Make the `app` foldedr the current working directory
+RUN mkdir -p /app
+WORKDIR /app
+
+COPY . .
+
+# Install project dependencies
+RUN npm install
+# RUN npm install \
+  # && npm install -g cross-env
+RUN npm install -g @quasar/cli
+RUN npm install pm2 -g
+
+EXPOSE 8000
+CMD ["pm2-runtime", "quasar serve --history", "--env", "production"]
+# CMD ["npm", "run", "prod"]
